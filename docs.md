@@ -403,6 +403,46 @@ See also [`binds.<name>.action`](#programsnirisettingsbindsnameaction) for more 
 
 
 
+## `programs.niri.settings.blur`
+- type: `null or (blur)`
+- default: `null`
+
+Global blur configuration. When null (the default), no blur section is emitted and niri's own defaults apply.
+
+> [!important]
+> This option is not yet available in stable niri.
+> 
+> If you wish to modify this option, you should make sure you're using the latest unstable niri.
+> 
+> Otherwise, your system might fail to build.
+
+
+
+## `programs.niri.settings.blur.enable`
+- type: `boolean`
+- default: `true`
+
+
+## `programs.niri.settings.blur.noise`
+- type: `floating point number`
+- default: `0.020000`
+
+
+## `programs.niri.settings.blur.offset`
+- type: `floating point number or signed integer`
+- default: `3.000000`
+
+
+## `programs.niri.settings.blur.passes`
+- type: `signed integer`
+- default: `3`
+
+
+## `programs.niri.settings.blur.saturation`
+- type: `floating point number or signed integer`
+- default: `1.500000`
+
+
 ## `programs.niri.settings.screenshot-path`
 - type: `null or string`
 - default: `"~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"`
@@ -3028,6 +3068,78 @@ Takes effect only when the window is on an output with [`outputs.<name>.variable
 - default: `null`
 
 
+<!-- programs.niri.settings.window-rules.*.background-effect -->
+
+## `programs.niri.settings.window-rules.*.background-effect.blur`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.background-effect.noise`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.background-effect.saturation`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.background-effect.xray`
+- type: `null or boolean`
+- default: `null`
+
+
+<!-- programs.niri.settings.window-rules.*.popups -->
+
+<!-- programs.niri.settings.window-rules.*.popups.background-effect -->
+
+## `programs.niri.settings.window-rules.*.popups.background-effect.blur`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.popups.background-effect.noise`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.popups.background-effect.saturation`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.popups.background-effect.xray`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.popups.geometry-corner-radius`
+- type: `null or (submodule)`
+- default: `null`
+
+
+## `programs.niri.settings.window-rules.*.popups.geometry-corner-radius.bottom-left`
+- type: `floating point number`
+
+
+## `programs.niri.settings.window-rules.*.popups.geometry-corner-radius.bottom-right`
+- type: `floating point number`
+
+
+## `programs.niri.settings.window-rules.*.popups.geometry-corner-radius.top-left`
+- type: `floating point number`
+
+
+## `programs.niri.settings.window-rules.*.popups.geometry-corner-radius.top-right`
+- type: `floating point number`
+
+
+## `programs.niri.settings.window-rules.*.popups.opacity`
+- type: `null or floating point number`
+- default: `null`
+
+
 ## `programs.niri.settings.layer-rules`
 - type: `list of (layer rule)`
 
@@ -3279,6 +3391,78 @@ This is a natural extension of the April Fools' 2025 feature.
 
 Set to `true` to place the surface into the backdrop visible in the Overview and between workspaces.
 This will only work for background layer surfaces that ignore exclusive zones (typical for wallpaper tools). Layers within the backdrop will ignore all input.
+
+
+<!-- programs.niri.settings.layer-rules.*.background-effect -->
+
+## `programs.niri.settings.layer-rules.*.background-effect.blur`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.background-effect.noise`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.background-effect.saturation`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.background-effect.xray`
+- type: `null or boolean`
+- default: `null`
+
+
+<!-- programs.niri.settings.layer-rules.*.popups -->
+
+<!-- programs.niri.settings.layer-rules.*.popups.background-effect -->
+
+## `programs.niri.settings.layer-rules.*.popups.background-effect.blur`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.popups.background-effect.noise`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.popups.background-effect.saturation`
+- type: `null or floating point number or signed integer`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.popups.background-effect.xray`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.popups.geometry-corner-radius`
+- type: `null or (submodule)`
+- default: `null`
+
+
+## `programs.niri.settings.layer-rules.*.popups.geometry-corner-radius.bottom-left`
+- type: `floating point number`
+
+
+## `programs.niri.settings.layer-rules.*.popups.geometry-corner-radius.bottom-right`
+- type: `floating point number`
+
+
+## `programs.niri.settings.layer-rules.*.popups.geometry-corner-radius.top-left`
+- type: `floating point number`
+
+
+## `programs.niri.settings.layer-rules.*.popups.geometry-corner-radius.top-right`
+- type: `floating point number`
+
+
+## `programs.niri.settings.layer-rules.*.popups.opacity`
+- type: `null or floating point number`
+- default: `null`
 
 
 ## `programs.niri.settings.xwayland-satellite`

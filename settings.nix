@@ -325,7 +325,6 @@
 
       decoration =
         self:
-
         let
           css-color = fmt.masked-link {
             href = "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value";
@@ -604,6 +603,19 @@
           '';
         };
 
+      background-effect-rule = section {
+        xray = nullable types.bool;
+        blur = nullable types.bool;
+        noise = nullable float-or-int;
+        saturation = nullable float-or-int;
+      };
+
+      popups-rule = section {
+        opacity = nullable types.float;
+        geometry-corner-radius = geometry-corner-radius-rule;
+        background-effect = background-effect-rule;
+      };
+
       regex = rename "regular expression" types.str;
 
       rule-descriptions =
@@ -613,11 +625,9 @@
           surface-rule,
           Surface-rules,
           example-fields,
-
           self,
           spawn-at-startup,
         }:
-
         let
           matches = link-opt (subopts self).matches;
           excludes = link-opt (subopts self).excludes;
@@ -853,7 +863,6 @@
               inherit extra-docs-options;
             };
           }
-
         ];
 
       make-section = type: optional type { };
@@ -892,6 +901,7 @@
         #   "xwayland-satellite"
         #   "clipboard"
         #   "hotkey-overlay"
+        #   "blur"
 
         #   "window-rules"
         #   "layer-rules"
@@ -1062,33 +1072,24 @@
                     }
                   ''}
                 ''
-
                 #   + ''
                 #   There is also a set of functions available under ${fmt.code "config.lib.niri.actions"}.
-
                 #   Usage is like so:
-
                 #   ${fmt.nix-code-block ''
                 #     {
                 #       ${options.binds} = with config.lib.niri.actions; {
                 #         "XF86AudioRaiseVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";
                 #         "XF86AudioLowerVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-";
-
                 #         "Mod+D".action = spawn "fuzzel";
                 #         "Mod+1".action = focus-workspace 1;
-
                 #         "Mod+Shift+E".action = quit;
                 #         "Mod+Ctrl+Shift+E".action = quit { skip-confirmation=true; };
-
                 #         "Mod+Plus".action = set-column-width "+10%";
                 #       }
                 #     }
                 #   ''}
-
                 #   Keep in mind that each one of these attributes (i.e. the nix bindings) are actually identical functions with different node names, and they can take arbitrarily many arguments. The documentation here is based on the ${fmt.em "real"} acceptable arguments for these actions, but the nix bindings do not enforce this. If you pass the wrong arguments, niri will reject the config file, but evaluation will proceed without problems.
-
                 #   For actions that don't take any arguments, just use the corresponding attribute from ${fmt.code "config.lib.niri.actions"}. They are listed as ${fmt.code "action-name"}. For actions that ${fmt.em "do"} take arguments, they are notated like so: ${fmt.code "λ action-name :: <args>"}, to clarify that they "should" be used as functions. Hopefully, ${fmt.code "<args>"} will be clear enough in most cases, but it's worth noting some nontrivial kinds of arguments:
-
                 #   ${fmt.list [
                 #     ''
                 #       ${fmt.code "size-change"}: This is a special argument type used for some actions by niri. It's a string. \
@@ -1107,7 +1108,6 @@
                 #       ${fmt.code ''spawn ["foo" "bar" "baz"]''} is equivalent to ${fmt.code ''spawn "foo" "bar" "baz"''}.
                 #     ''
                 #   ]}
-
                 #   ${fmt.admonition.tip ''
                 #     You can use partial application to create a spawn command with full support for shell syntax:
                 #     ${fmt.nix-code-block ''
@@ -1120,7 +1120,6 @@
                 #       }
                 #     ''}
                 #   ''}
-
                 #   ${
                 #     let
                 #       show-bind =
@@ -1148,10 +1147,8 @@
                 #             u16 = "u16";
                 #             String = "string";
                 #           };
-
                 #           type-or =
                 #             rust-name: fallback: type-names.${rust-name} or (lib.warn "unhandled type `${rust-name}`" fallback);
-
                 #           base = content: "${fmt.code content}${exclusive}";
                 #           lambda = args: base "λ ${name} :: ${args}";
                 #         in
@@ -1166,7 +1163,6 @@
                 #           } }";
                 #           unknown = ''
                 #             ${lambda "unknown"}
-
                 #               The code that generates this documentation does not know how to parse the definition:
                 #               ```rs
                 #               ${params.raw-name}(${params.raw})
@@ -1189,6 +1185,26 @@
                 ;
               };
             };
+          }
+
+          {
+            blur =
+              nullable (
+                record' "blur" {
+                  enable = optional types.bool true;
+                  passes = optional types.int 3;
+                  offset = optional float-or-int 3.0;
+                  noise = optional types.float 0.02;
+                  saturation = optional float-or-int 1.5;
+                }
+              )
+              // {
+                description = ''
+                  Global blur configuration. When null (the default), no blur section is emitted and niri's own defaults apply.
+
+                  ${unstable-note}
+                '';
+              };
           }
 
           {
@@ -2187,7 +2203,6 @@
                             The color of the tab indicator for windows that do not have keyboard focus.
                           '';
                         })
-
                       ];
                     }
                   )
@@ -2856,6 +2871,10 @@
                   {
                     tiled-state = nullable types.bool;
                   }
+                  {
+                    background-effect = background-effect-rule;
+                    popups = popups-rule;
+                  }
                 ]
               )
               // {
@@ -2948,6 +2967,10 @@
                         This is a natural extension of the April Fools' 2025 feature.
                       '';
                     };
+                  }
+                  {
+                    background-effect = background-effect-rule;
+                    popups = popups-rule;
                   }
                 ]
               )
@@ -3407,6 +3430,19 @@
           ]
         );
 
+        background-effect = map' plain' (cfg: [
+          (nullable leaf "xray" cfg.xray)
+          (nullable leaf "blur" cfg.blur)
+          (nullable leaf "noise" cfg.noise)
+          (nullable leaf "saturation" cfg.saturation)
+        ]);
+
+        popups = map' plain' (cfg: [
+          (nullable leaf "opacity" cfg.opacity)
+          (nullable (map' leaf corner-radius) "geometry-corner-radius" cfg.geometry-corner-radius)
+          (background-effect "background-effect" cfg.background-effect)
+        ]);
+
         tab-indicator = map' plain (
           cfg:
           toggle "off" cfg [
@@ -3738,6 +3774,8 @@
             (nullable leaf "variable-refresh-rate" cfg.variable-refresh-rate)
             (nullable leaf "scroll-factor" cfg.scroll-factor)
             (nullable leaf "tiled-state" cfg.tiled-state)
+            (background-effect "background-effect" cfg.background-effect)
+            (popups "popups" cfg.popups)
           ])
         ]))
         (each cfg.layer-rules (cfg: [
@@ -3750,6 +3788,8 @@
             (nullable (map' leaf corner-radius) "geometry-corner-radius" cfg.geometry-corner-radius)
             (nullable leaf "place-within-backdrop" cfg.place-within-backdrop)
             (nullable leaf "baba-is-float" cfg.baba-is-float)
+            (background-effect "background-effect" cfg.background-effect)
+            (popups "popups" cfg.popups)
           ])
         ]))
 
@@ -3779,6 +3819,16 @@
             (nullable leaf "path" cfg.xwayland-satellite.path)
           ])
         ])
+
+        (nullable (map' plain' (
+          cfg:
+          toggle "off" cfg [
+            (leaf "passes" cfg.passes)
+            (leaf "offset" cfg.offset)
+            (leaf "noise" cfg.noise)
+            (leaf "saturation" cfg.saturation)
+          ]
+        )) "blur" cfg.blur)
 
         (map' plain' (lib.mapAttrsToList leaf) "debug" cfg.debug)
       ];
