@@ -4476,6 +4476,45 @@ Path to the xwayland-satellite binary.
 Set it to something like `lib.getExe pkgs.xwayland-satellite-unstable`.
 
 
+## `programs.niri.settings.blur`
+
+
+Blur configuration
+
+
+## `programs.niri.settings.blur.enable`
+- type: `null or boolean`
+- default: `null`
+
+
+## `programs.niri.settings.blur.passes`
+- type: `null or signed integer`
+- default: `null`
+
+Controls the number of downsample/upsample passes for dual kawase blur.
+
+
+## `programs.niri.settings.blur.offset`
+- type: `null or floating point number`
+- default: `null`
+
+Pixel offset multiplier for each pass.
+
+
+## `programs.niri.settings.blur.noise`
+- type: `null or floating point number`
+- default: `null`
+
+Amount of noise to add on top of the blur.
+
+
+## `programs.niri.settings.blur.saturation`
+- type: `null or floating point number`
+- default: `null`
+
+Color saturation applied to the blurred background.
+
+
 ## `programs.niri.settings.debug`
 - type: `attribute set of kdl arguments`
 
